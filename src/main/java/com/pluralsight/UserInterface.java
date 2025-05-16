@@ -105,8 +105,8 @@ public class UserInterface {
 
     private void processGetByPriceRequest() {
 
-        double min = console.promptForDouble("Input the minimum price: ");
-        double max = console.promptForDouble("Input the maximum price: ");
+        double min = console.promptForDouble("Enter the minimum price: ");
+        double max = console.promptForDouble("Enter the maximum price: ");
 
         ArrayList<Vehicle> priceResult = d.getVehicleByPrice(min, max);
 
@@ -124,8 +124,8 @@ public class UserInterface {
 
     private void processGetByMakeModelRequest() {
 
-        String make = console.promptForString("Input Make you want to search for: ");
-        String model = console.promptForString("Input Model you want to search for: ");
+        String make = console.promptForString("Enter Make you want to search for: ");
+        String model = console.promptForString("Enter Model you want to search for: ");
 
         ArrayList<Vehicle> makeModelResult = d.getVehicleByMakeModel(make, model);
 
