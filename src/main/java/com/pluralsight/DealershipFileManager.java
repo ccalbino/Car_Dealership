@@ -4,19 +4,18 @@ import java.io.*;
 
 import java.util.regex.Pattern;
 
-
 public class DealershipFileManager {
 
 
-    private static String file = "inventory.csv";
+    private final static String fileName = "inventory.csv";
 
 
     public static Dealership getDealership() {
 
         try {
             Dealership dealership = null;
-            FileReader dealerShip = new FileReader(file);
-            BufferedReader bufferedReader = new BufferedReader(dealerShip);
+            FileReader dealerShipLog = new FileReader(fileName);
+            BufferedReader bufferedReader = new BufferedReader(dealerShipLog);
 
 
             String dealerShipCsv;
@@ -65,13 +64,13 @@ public class DealershipFileManager {
     public static void saveDealership(Dealership dealership) {
 
         try {
-            FileWriter dealerShipLog = new FileWriter(file);
+            FileWriter dealerShipLog = new FileWriter(fileName);
             BufferedWriter bufferedWriter = new BufferedWriter(dealerShipLog);
 
-            bufferedWriter.write(dealership.toStringDealership());
+            bufferedWriter.write(dealership.toStringLog());
 
             for(Vehicle v : dealership.getAllVehicles()){
-                bufferedWriter.write("\n" + v.toString());
+                bufferedWriter.write("\n" + v.toStringLog());
             }
 
             bufferedWriter.close();

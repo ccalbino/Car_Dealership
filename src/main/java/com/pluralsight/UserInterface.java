@@ -8,12 +8,16 @@ public class UserInterface {
 
 
     private Dealership d;
-    private ArrayList<Vehicle> c = new ArrayList<>();
+    private ArrayList<Contract> c = new ArrayList<>();
     private final Console console = new Console();
+
+
 
 
     private void init() {
         d = DealershipFileManager.getDealership();
+        c = ContractFileManager.getContracts();
+
 
 
     }
@@ -29,6 +33,29 @@ public class UserInterface {
 
         for (Vehicle v : vehicles)
             System.out.println(v.toString());
+
+    }
+
+    private void displayLease(ArrayList<Contract> contracts) {
+
+        System.out.println(LeaseContract.getFormattedHeader());
+        for (Contract contract : contracts) {
+            if (contract instanceof LeaseContract) {
+                System.out.println(contract);
+            }
+        }
+
+
+    }
+
+    private void displaySales(ArrayList<Contract> contracts) {
+        System.out.println(SalesContract.getFormattedHeader());
+        for (Contract contract : contracts) {
+            if (contract instanceof SalesContract) {
+                System.out.println(contract);
+            }
+        }
+
 
     }
 
@@ -50,7 +77,7 @@ public class UserInterface {
                  10- Create A Sale
                  11- Create A Lease
                  0 - Quit
-                Enter your command(number 1-9):\s""";
+                Enter your command(number 1-11):\s""";
 
 
         do {
@@ -105,14 +132,14 @@ public class UserInterface {
 
     private void processGetByPriceRequest() {
 
-        double min = console.promptForDouble("Enter the minimum price: ");
-        double max = console.promptForDouble("Enter the maximum price: ");
+        double min = console.promptForDouble("Input the minimum price: ");
+        double max = console.promptForDouble("Input the maximum price: ");
 
         ArrayList<Vehicle> priceResult = d.getVehicleByPrice(min, max);
 
 
         if (priceResult.isEmpty()) {
-            System.out.println("No Vehicles found within price range");
+            System.out.println( ColorCodes.RED + "No Vehicles found within price range" + ColorCodes.RESET);
         } else {
             System.out.println("These are the vehicles found within" + " " + min + " and " + max);
             System.out.println(Vehicle.getFormattedHeader());
@@ -124,13 +151,13 @@ public class UserInterface {
 
     private void processGetByMakeModelRequest() {
 
-        String make = console.promptForString("Enter Make you want to search for: ");
-        String model = console.promptForString("Enter Model you want to search for: ");
+        String make = console.promptForString("Input Make you want to search for: ");
+        String model = console.promptForString("Input Model you want to search for: ");
 
         ArrayList<Vehicle> makeModelResult = d.getVehicleByMakeModel(make, model);
 
         if (makeModelResult.isEmpty()) {
-            System.out.println("No Vehicles found within " + make + " " + model);
+            System.out.println( ColorCodes.RED + "No Vehicles found within " + make + " " + model + ColorCodes.RESET);
         } else {
             System.out.println("These are the Vehicles found within " + make + " " + model);
             System.out.println(Vehicle.getFormattedHeader());
@@ -147,7 +174,7 @@ public class UserInterface {
 
 
         if (yearResult.isEmpty()) {
-            System.out.println("No Vehicle found for " + minYear + " " + maxYear);
+            System.out.println(ColorCodes.RED + "No Vehicle found for " + minYear + " " + maxYear + ColorCodes.RESET);
 
         } else {
             System.out.println("These Vehicles are inside of this year: " + yearResult);
@@ -168,7 +195,7 @@ public class UserInterface {
 
 
         if (colorResult.isEmpty()) {
-            System.out.println("No Vehicles of this color: " + color);
+            System.out.println(ColorCodes.RED + "No Vehicles of this color: " + color + ColorCodes.RESET);
         } else {
             System.out.println("These are the Vehicles of this color: " + color);
             System.out.println(Vehicle.getFormattedHeader());
@@ -186,7 +213,7 @@ public class UserInterface {
         ArrayList<Vehicle> mileageResult = d.getVehicleByMileage(startingMileage, endingMileage);
 
         if (mileageResult.isEmpty()) {
-            System.out.println("No Vehicles have a mileage between these two numbers " + startingMileage + " " + endingMileage);
+            System.out.println( ColorCodes.RED + "No Vehicles have a mileage between these two numbers " + startingMileage + " " + endingMileage + ColorCodes.RESET);
         } else {
             System.out.println("These Vehicles have a mileage between " + startingMileage + " " + endingMileage);
             System.out.println(Vehicle.getFormattedHeader());
@@ -202,7 +229,7 @@ public class UserInterface {
         ArrayList<Vehicle> typeResult = d.getVehicleByType(type);
 
         if (typeResult.isEmpty()) {
-            System.out.println("There are no Vehicles with the type of " + type);
+            System.out.println( ColorCodes.RED + "There are no Vehicles with the type of " + type + ColorCodes.RESET);
         } else {
             System.out.println("These are the Vehicles with the type of " + type);
             System.out.println(Vehicle.getFormattedHeader());
@@ -270,12 +297,12 @@ public class UserInterface {
 
 
         if (choiceResult.isEmpty()) {
-            System.out.println("No Vehicle....");
+            System.out.println( ColorCodes.RED + "No Vehicle...." + ColorCodes.RESET);
 
         } else {
             for (Vehicle vehicle : choiceResult) {
                 d.removeVehicle(vehicle);
-                System.out.println(choiceResult + " Was Removed....");
+                System.out.println( ColorCodes.PURPLE +choiceResult + " Was Removed...." + ColorCodes.RESET);
             }
         }
         DealershipFileManager.saveDealership(d);
@@ -284,23 +311,24 @@ public class UserInterface {
 
 
     private void processVehicleByLease() {
-        String date = console.promptForString("Enter the Date");
-        String name = console.promptForString("Enter your name");
-        String email = console.promptForString("Enter your email");
+        String date = console.promptForString("Enter the Date: ");
+        String name = console.promptForString("Enter your name: ");
+        String email = console.promptForString("Enter your email: ");
         System.out.println("Enter vehicle information");
         int vin = console.promptForInt("Enter VIN: ");
-        int year = console.promptForInt("Enter Year: ");
-        String make = console.promptForString("Enter Make: ");
-        String model = console.promptForString("Enter Model: ");
-        String type = console.promptForString("Vehicle Type: ");
-        String color = console.promptForString("Enter Color: ");
-        int odometer = console.promptForInt("Enter Distance ");
-        double price = console.promptForDouble("Enter Price: ");
 
 
-        Vehicle vehicle = new Vehicle(vin, year, make, model, type, color, odometer, price);
+        ArrayList<Vehicle> vinNumber = d.getVehicleByVinNumber(vin);
+        if(vinNumber.isEmpty()){
+            System.out.println( ColorCodes.RED + "No Vehicles with this Vin Number..." + ColorCodes.RESET);
+        }
 
-
+        for (Vehicle vehicle : vinNumber) {
+            LeaseContract leaseContract = new LeaseContract(date, name, email, vehicle, vehicle.getPrice(), vehicle.getPrice());
+            c.add(leaseContract);
+            displayLease(c);
+            ContractFileManager.saveContracts(leaseContract);
+        }
     }
 
 
@@ -309,18 +337,29 @@ public class UserInterface {
         String name = console.promptForString("Enter your name: ");
         String email = console.promptForString("Enter your email: ");
         System.out.println("Enter vehicle information: ");
+
+
         int vin = console.promptForInt("Enter VIN: ");
-        int year = console.promptForInt("Enter Year: ");
-        String make = console.promptForString("Enter Make: ");
-        String model = console.promptForString("Enter Model: ");
-        String type = console.promptForString("Vehicle Type: ");
-        String color = console.promptForString("Enter Color: ");
-        int odometer = console.promptForInt("Enter Distance ");
-        double price = console.promptForDouble("Enter Price: ");
-        int finance = console.promptForInt("Do you want finance? Yes = 1. No = 0;");
+        ArrayList<Vehicle> vinNumber = d.getVehicleByVinNumber(vin);
+
+
+
+
+        int finance = console.promptForInt("Do you want finance? Yes = 1. No = 0: ");
         boolean financeSelected = (finance == 1);
 
 
+        if(vinNumber.isEmpty()){
+            System.out.println( ColorCodes.RED + "No Vehicles with this Vin Number..." + ColorCodes.RESET);
+        }
 
+        for (Vehicle vehicle : vinNumber) {
+            SalesContract salesContract = new SalesContract(date, name, email, vehicle, financeSelected, vehicle.getPrice());
+            c.add(salesContract);
+            d.removeVehicle(vehicle);
+            displaySales(c);
+            com.pluralsight.ContractFileManager.saveContracts(salesContract);
+        }
     }
+
 }
